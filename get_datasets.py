@@ -6,7 +6,7 @@ import numpy as np
 from collections import OrderedDict
 from pathlib import Path
 
-from configs import args_point_robot
+from configs.env import args_point_robot
 from rlkit.replay_memory import ReplayMemory
 from rlkit.sac import SAC
 from src.envs.point_robot import PointEnv
@@ -27,12 +27,15 @@ parser.add_argument('--device', type=str, default="cuda:0")
 parser.add_argument('--seed', type=int, default=123456)
 parser.add_argument('--task_id_start', type=int, default=0)
 parser.add_argument('--task_id_end', type=int, default=5)
-parser.add_argument('--suffix', type=int, default=2000, help='model checkpoint suffix')
+parser.add_argument('--suffix', type=int, default=3000, help='model checkpoint suffix')
 parser.add_argument('--capacity', type=int, default=2000, help='total timesteps')
 local_args, rest_args = parser.parse_known_args()
 
 # download config
 if local_args.env_type == 'point_robot':
+    from utils.point_robot_utils import load_goals_from_task_info
+    load_goals_from_task_info('./datasets/PointRobot-v0/task_info.json', './datasets/PointRobot-v0/task_goals.npy')
+    
     args = vars(args_point_robot.get_args(rest_args))
     tasks = np.load('./datasets/PointRobot-v0/task_goals.npy')
     env = PointEnv(max_episode_steps=args['max_episode_steps'], num_tasks=args['num_tasks'])
@@ -80,7 +83,7 @@ action_min, action_max = env.action_space.low, env.action_space.high
 action_abs_min = min(np.abs(action_min).min(), np.abs(action_max).min())
 
 # set seed
-set_seed(local_args.seed, env)
+#set_seed(local_args.seed, env)
 
 # task information
 task_info = OrderedDict()
@@ -88,7 +91,7 @@ return_scale_info = OrderedDict()
 
 if local_args.data_type == 'medium':
     if local_args.env_type == 'point_robot':
-        local_args.suffix = [480] * args['num_tasks']
+        local_args.suffix = [500] * args['num_tasks']
     elif local_args.env_type == 'cheetah_vel':
         local_args.suffix = [60000] * args['num_tasks']
     elif local_args.env_type == 'cheetah_dir':
