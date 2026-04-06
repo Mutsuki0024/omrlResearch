@@ -1,12 +1,92 @@
 # OMRL Research: Offline Meta Reinforcement Learning with World Models and Decision Transformer
 
-This repository implements an **Offline Meta Reinforcement Learning (OMRL)** framework that combines a **context-aware world model** with a **Meta Decision Transformer (Meta-DT)**.
+This project explores how an agent can **quickly adapt to new tasks using only pre-collected data**, without interacting with the environment during training.
 
-The objective is to enable **fast adaptation to new tasks using only offline data**, without additional environment interaction.
+To understand the problem intuitively:
+
+- Imagine training a robot to reach different target positions  
+- Each target corresponds to a different task  
+- Normally, the robot needs to **try repeatedly (trial-and-error)** to learn each new task  
+
+However, in many real-world scenarios:
+
+- Interaction is **expensive** (e.g., robotics, autonomous driving)  
+- Or even **impossible** (e.g., offline datasets only)  
 
 ---
 
-## 🚀 Overview
+## ❓ What is the challenge?
+
+We want an agent that can:
+
+- Learn from a **fixed dataset (offline data)**  
+- Handle **multiple different tasks**  
+- **Adapt quickly** when facing a new task  
+
+This is difficult because:
+
+- The agent **does not know which task it is solving**  
+- It **cannot collect new data to explore**  
+- Data distribution may differ between training and testing  
+
+---
+
+## 💡 What does this project do?
+
+This project proposes a solution by combining two ideas:
+
+### 1. Learn to infer the task (World Model)
+
+Instead of being told the task explicitly, the agent:
+
+- Observes a short sequence of past behavior  
+- Infers a hidden variable `z` that represents the task  
+
+---
+
+### 2. Learn a general decision policy (Decision Transformer)
+
+Once the task is inferred:
+
+- The agent uses a sequence model (similar to GPT)  
+- It predicts actions based on:
+  - past states
+  - past actions
+  - rewards
+  - desired future return
+  - inferred task `z`
+
+👉 Intuition:  
+"Given the situation and inferred task, what should I do next?"
+
+---
+
+## Overall Idea
+
+The system works as follows:
+
+1. Observe a small amount of past experience  
+2. Infer the current task  
+3. Use a general policy to act under that task  
+
+This allows the agent to:
+
+- Reuse past knowledge  
+- Avoid retraining from scratch  
+- Adapt quickly to new situations  
+
+---
+
+## Key Goal
+
+> Build a system that can **generalize across tasks and adapt quickly**,  
+> using **only offline data**, without additional environment interaction.
+
+---
+
+---
+
+## Overview
 
 This project focuses on:
 
@@ -27,7 +107,7 @@ The framework consists of two key components:
 
 ---
 
-## 🧠 Method
+## Method
 
 ### Problem Setting
 
@@ -67,7 +147,7 @@ Output:
 
 ---
 
-## ⚙️ Installation
+## Installation
 
     git clone https://github.com/Mutsuki0024/omrlResearch.git
     cd omrlResearch
@@ -79,7 +159,7 @@ Output:
 
 ---
 
-## 📊 Current Experiments Environment
+## Current Experiments Environment
 
 **PointRobot-v0**
 
@@ -91,7 +171,7 @@ Output:
 
 ---
 
-## 📈 Results
+## Results
 
 - Fast adaptation to unseen tasks  
 - Stable performance in the offline setting  
@@ -106,7 +186,7 @@ Performance is influenced by:
 
 ---
 
-## 🔍 Key Insights
+## Key Insights
 
 - Latent task inference improves generalization  
 - Decision Transformer is effective for offline RL  
@@ -115,16 +195,9 @@ Performance is influenced by:
 
 ---
 
-## 📌 Future Work
+## Future Work
 
 - In-episode task switching  
 - Uncertainty-aware task inference  
 - Improved robustness to distribution shift  
 - Scaling to more complex environments  
-
-
----
-
-## 👤 Author
-
-GitHub: https://github.com/Mutsuki0024
