@@ -15,7 +15,7 @@ However, in many real-world scenarios:
 
 ---
 
-## ❓ What is the challenge?
+## What is the challenge?
 
 We want an agent that can:
 
@@ -31,7 +31,7 @@ This is difficult because:
 
 ---
 
-## 💡 What does this project do?
+## What does this project do?
 
 This project proposes a solution by combining two ideas:
 
@@ -56,7 +56,7 @@ Once the task is inferred:
   - desired future return
   - inferred task `z`
 
-👉 Intuition:  
+Intuition:  
 "Given the situation and inferred task, what should I do next?"
 
 ---
